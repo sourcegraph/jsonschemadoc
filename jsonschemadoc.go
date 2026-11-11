@@ -113,7 +113,7 @@ func Generate(schema *jsonschema.Schema) (string, error) {
 	return buf.String(), nil
 }
 
-func marshalIndentIfLong(v interface{}, prefix, indent string) ([]byte, error) {
+func marshalIndentIfLong(v any, prefix, indent string) ([]byte, error) {
 	const longChars = 30
 	b, err := json.Marshal(v)
 	if len(b) > longChars {
@@ -138,7 +138,7 @@ func writeJSONComment(buf *bytes.Buffer, indent, space, text string) error {
 	return nil
 }
 
-func writeJSONValue(enc *json.Encoder, buf *bytes.Buffer, v interface{}) error {
+func writeJSONValue(enc *json.Encoder, buf *bytes.Buffer, v any) error {
 	if err := enc.Encode(v); err != nil {
 		return err
 	}
@@ -205,7 +205,7 @@ func isType(schema *jsonschema.Schema, typ jsonschema.PrimitiveType) bool {
 }
 
 func extraField(schema *jsonschema.Schema, name string) string {
-	var m map[string]interface{}
+	var m map[string]any
 	if schema.Raw == nil {
 		return ""
 	}
@@ -229,9 +229,9 @@ type propertyGroup struct {
 
 // property represents a jsonschema.Schema.Properties and its name in a single structure.
 type property struct {
-	name     string        // property name
-	comment  string        // doc comment
-	value    *interface{}  // default value (or const value)
-	examples []interface{} // other example values
-	first    bool          // show this property at the top
+	name     string // property name
+	comment  string // doc comment
+	value    *any   // default value (or const value)
+	examples []any  // other example values
+	first    bool   // show this property at the top
 }
